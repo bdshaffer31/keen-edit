@@ -1,0 +1,32 @@
+TODO for IDE development:
+ - Pylint python code
+ - better coloring for syntax highlight
+ - file explorer that opens in current directory
+ - open folder option that allows a directory to be open
+ - multiple tabs to switch between
+	- also multiple windows too
+ - terminal stays within tkinter
+	- or at least is resized reasonably
+ - terminal is closed when editor is closed
+ - git integration via cmder
+ - interpretor for unicode characters?
+ - saved / unsaved changes tracker at top of editor
+ - open last open file when re-oening
+	- restore workspace
+ - add open console to view menu
+	- involves adding view menu
+ - font options
+ - auto indent
+ - control z undo, control y redo 
+
+Completed:
+ - ctrl + s, ctrl + o save and open
+ - syntax highlightning using pygment
+ - tab as four spaces ;)
+
+
+
+
+
+
+
