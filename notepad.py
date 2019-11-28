@@ -65,7 +65,7 @@ class Notepad:
         screenWidth = self.root.winfo_screenwidth() 
         screenHeight = self.root.winfo_screenheight() 
 
-        # For left-alling 
+        # For left-allign
         left = (screenWidth / 2) - (self.width / 2)  
 
         # For right-allign 
@@ -247,5 +247,4 @@ class Notepad:
 # Run main application 
 notepad = Notepad(width=600,height=400) 
 notepad.run() 
-
 
