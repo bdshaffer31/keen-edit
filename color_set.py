@@ -1,8 +1,10 @@
 
-class TokenColorSet:
+class ColorSet:
 
     def __init__(self):
         # default theme
+        slate  =  '#778899'
+        gainsboro = '#DCDCDC'
         base02 =  '#073642'
         base01 =  '#586e75'
         base03 =  '#002b36'
@@ -19,6 +21,8 @@ class TokenColorSet:
         blue   =  '#268bd2'
         cyan   =  '#2aa198'
         green  =  '#859900'
+
+        self.background_color = gainsboro
         
         self.token_colors = {
             'Token.Keyword':               base02, 
@@ -29,26 +33,26 @@ class TokenColorSet:
             'Token.Keyword.Reserved':      base02,
             'Token.Keyword.Type':          base02,
 
-            'Token.Name':                  orange,
-            'Token.Name.Attribute':        orange,
+            'Token.Name':                  cyan,
+            'Token.Name.Attribute':        magenta,
             'Token.Name.Builtin':          orange,
-            'Token.Name.Builtin.Pseudo':   orange,
-            'Token.Name.Class':            orange,
-            'Token.Name.Constant':         orange,
-            'Token.Name.Decorator':        orange,
-            'Token.Name.Entity':           orange,
-            'Token.Name.Exception':        orange, 
-            'Token.Name.Function':         orange,
-            'Token.Name.Function.Magic':   orange,
+            'Token.Name.Builtin.Pseudo':   base0,
+            'Token.Name.Class':            base0,
+            'Token.Name.Constant':         base2,
+            'Token.Name.Decorator':        base2,
+            'Token.Name.Entity':           base2,
+            'Token.Name.Exception':        base01, 
+            'Token.Name.Function':         red,
+            'Token.Name.Function.Magic':   base01,
             'Token.Name.Label':            orange,
             'Token.Name.Namespace':        orange,
             'Token.Name.Other':            orange,
-            'Token.Name.Tag':              orange,
-            'Token.Name.Variable':         orange,
-            'Token.Name.Variable.Class':   orange,
-            'Token.Name.Variable.Global':  orange,
-            'Token.Name.Variable.Instance':orange,
-            'Token.Name.Variable.Magic':   orange,
+            'Token.Name.Tag':              violet,
+            'Token.Name.Variable':         violet,
+            'Token.Name.Variable.Class':   violet,
+            'Token.Name.Variable.Global':  magenta,
+            'Token.Name.Variable.Instance':magenta,
+            'Token.Name.Variable.Magic':   magenta,
 
             'Token.Literal':               magenta,
             'Token.Literal.Date':          magenta,

@@ -18,6 +18,7 @@ TODO for IDE development:
  - font options
  - auto indent
  - control z undo, control y redo 
+ - add icon
 
 Completed:
  - ctrl + s, ctrl + o save and open

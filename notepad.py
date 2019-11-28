@@ -14,11 +14,12 @@ import ctypes
 from ctypes import *
 import tkinter.font as tkfont
 
-from token_color_set import TokenColorSet
-from terminal import ConsoleEmulator
+from color_set import ColorSet
+from terminal_interface import TerminalInterface
 
 
 class Notepad:
+    
     root = Tk() 
 
     # fixes the resolution
@@ -42,11 +43,14 @@ class Notepad:
   
     def __init__(self,**kwargs): 
 
+        self.color_set = ColorSet()
+        self.unsaved_changes = False
+
         # Set icon 
         try: 
-                self.root.wm_iconbitmap("Notepad.ico")  
+            self.root.wm_iconbitmap("Notepad.ico")  
         except: 
-                pass
+            print('icon not found')
 
         # Set window size (the default is 300x300) 
         try: 
@@ -83,6 +87,7 @@ class Notepad:
 
         # set tab to four spaces
         self.text_area.bind("<Tab>", self.tab)
+        self.text_area.configure(background = self.color_set.background_color)
 
         # add file menu options and then add to menu bar 
         self.file_menu.add_command(label="New", command=self.new_file)   
@@ -138,11 +143,12 @@ class Notepad:
         showinfo("Notepad","Benjamin Shaffer") 
 
     def open_console(self):
-        console_em = ConsoleEmulator()
+        terminal = TerminalInterface()
+        terminal.open_terminal()
+        terminal.open_console_emulator()
 
     def config_syntax_theme(self):
-        color_set = TokenColorSet()
-        for token, color in color_set.token_colors.items():
+        for token, color in self.color_set.token_colors.items():
             self.text_area.tag_configure(token, foreground = color)
 
 
@@ -245,6 +251,6 @@ class Notepad:
 
   
 # Run main application 
-notepad = Notepad(width=600,height=400) 
+notepad = Notepad(width=500,height=600) 
 notepad.run() 
 
