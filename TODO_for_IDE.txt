@@ -27,7 +27,7 @@ Completed:
  - better coloring for syntax highlight
  - add open console to view menu
 	- involves adding view menu
-
+ - text doesn't wrap
 
 
 

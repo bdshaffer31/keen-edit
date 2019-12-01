@@ -13,8 +13,10 @@ from pygments.lexers.python import PythonLexer
 import ctypes
 from ctypes import *
 import tkinter.font as tkfont
+from tkinter.tix import *
 
 from color_set import ColorSet
+from file_explorer import FileExplorer
 from terminal_interface import TerminalInterface
 
 
@@ -28,7 +30,7 @@ class Notepad:
     # default window width and height 
     width = 400
     height = 500
-    text_area = Text(root) 
+    text_area = Text(root, wrap="none") 
     menu_bar = Menu(root) 
     file_menu = Menu(menu_bar, tearoff = 0) 
     edit_menu = Menu(menu_bar, tearoff = 0)
@@ -36,15 +38,17 @@ class Notepad:
     help_menu = Menu(menu_bar, tearoff = 0) 
 
     popup_menu = Menu(menu_bar, tearoff=0)
-      
+
     # To add scrollbar 
-    scroll_bar = Scrollbar(text_area)      
+    yscroll_bar = Scrollbar(text_area)
+    xscroll_bar = Scrollbar(text_area, orient = HORIZONTAL)      
     __file = None
   
     def __init__(self,**kwargs): 
         self.color_set = ColorSet()
         self.color_set.set_kimbie_dark()
         self.unsaved_changes = False
+        self.file_explorer = FileExplorer()
         self.run_path = os.path.abspath('notepad.py')
         # Set icon 
         try: 
@@ -114,19 +118,23 @@ class Notepad:
         self.view_menu.add_command(label = 'Open Console', command = self.open_console)
         self.view_menu.add_command(label = 'Syntax Highlight', command = self.syntax_highlight)
         self.view_menu.add_command(label = 'New Window', command = self.open_new_window)
+        self.view_menu.add_command(label = 'File Explorer', command = self.file_explorer.open_file_explorer)
         self.menu_bar.add_cascade(label = 'View', menu = self.view_menu)
 
         # To create a feature of description of the notepad 
         self.help_menu.add_command(label = 'About Notepad', command=self.__showAbout)  
         self.menu_bar.add_cascade(label = 'Help', menu=self.help_menu) 
 
-	    # adding menu bar to root and filling in right side?
+	    # adding menu bar to root
         self.root.config(menu=self.menu_bar) 
-        self.scroll_bar.pack(side=RIGHT,fill=Y)
 
+        self.yscroll_bar.pack(side=RIGHT,fill=Y)
+        self.xscroll_bar.pack(side=BOTTOM,fill=X)
         # Scrollbar will adjust automatically according to the content         
-        self.scroll_bar.config(command=self.text_area.yview)      
-        self.text_area.config(yscrollcommand=self.scroll_bar.set)    
+        self.yscroll_bar.config(command = self.text_area.yview)      
+        self.xscroll_bar.config(command = self.text_area.xview) 
+        self.text_area.config(yscrollcommand = self.yscroll_bar.set)    
+        self.text_area.config(xscrollcommand = self.xscroll_bar.set)    
 
         # Bind right click to contect menu
         self.root.bind("<Button-3>", self.popup)

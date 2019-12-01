@@ -17,15 +17,8 @@ class ColorSet:
     def set_solarized(self):
         darker_gains  =  '#bfbfbf'
         gainsboro = '#DCDCDC'
-        base02 =  '#073642' #black?
-        dark_grey =  '#586e75' #dark grey
         dark_blue =  '#004a5d' # dark dark blue #002b36
         soft_slate =  '#657b83' #slate ish v similiar to base01
-        base0  =  '#839496' #slightly different light grey
-        base1  =  '#93a1a1' #lighter grey
-        tan  =  '#eee8d5' #light tan
-        base3  =  '#fdf6e3' #lighter tan
-        yellow =  '#b58900'
         orange =  '#cb4b16'
         red    =  '#dc322f'
         magenta = '#d33682'
