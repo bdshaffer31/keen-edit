@@ -11,8 +11,6 @@ TODO for IDE development:
  - git integration via cmder
  - interpretor for unicode characters?
  - saved / unsaved changes tracker at top of editor
- - open last open file when re-oening
-	- restore workspace
  - add open console to view menu
 	- involves adding view menu
  - font options

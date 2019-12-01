@@ -64,6 +64,7 @@ class Notepad:
 
         # Set the window text 
         self.root.title("Untitled - Notepad") 
+        self.root.protocol("WM_DELETE_WINDOW", self.on_close_root)
 
         # Center the window 
         screenWidth = self.root.winfo_screenwidth() 
@@ -115,7 +116,7 @@ class Notepad:
         self.help_menu.add_command(label="About Notepad", command=self.__showAbout)  
         self.menu_bar.add_cascade(label="Help", menu=self.help_menu) 
 
-	# adding menu bar to root and filling in right side?
+	    # adding menu bar to root and filling in right side?
         self.root.config(menu=self.menu_bar) 
         self.scroll_bar.pack(side=RIGHT,fill=Y)
 
@@ -133,7 +134,12 @@ class Notepad:
 
         # Save and open on keyboard showrtcuts
         self.text_area.bind("<Control-s>", self.save_file_event)
-        self.text_area.bind("<Control-o>", self.open_file_event)        
+        self.text_area.bind("<Control-o>", self.open_file_event)    
+
+        # set text area and header to last opened file
+        file_name = self.read_last_opened()
+        if file_name:
+            self.set_from_file(file_name)    
 
     def quit_application(self): 
         self.root.destroy() 
@@ -142,15 +148,34 @@ class Notepad:
     def __showAbout(self): 
         showinfo("Notepad","Benjamin Shaffer") 
 
+    def on_close_root(self):
+        print('on_close called')
+        latest_file = open('latest_file.txt', 'w')
+        if self.__file:
+            current_path = os.path.abspath(self.__file)
+            latest_file.write(current_path)
+        else:
+            latest_file.write('')
+        latest_file.close()
+        self.root.destroy()
+
+    def read_last_opened(self):
+        if os.path.getsize('latest_file.txt') > 0:
+            latest_file = open('latest_file.txt', 'r')
+            last_line = latest_file.readlines()[-1]
+            latest_file.close()
+            return last_line
+        else:
+            return False
+
+
     def open_console(self):
         terminal = TerminalInterface()
         terminal.open_terminal()
-        terminal.open_console_emulator()
 
     def config_syntax_theme(self):
         for token, color in self.color_set.token_colors.items():
             self.text_area.tag_configure(token, foreground = color)
-
 
     def syntax_highlight(self):
         data = self.text_area.get("1.0",'end-1c')
@@ -179,14 +204,17 @@ class Notepad:
         else: 
             # Try to open the file 
             # set the window title 
-            self.root.title(os.path.basename(self.__file) + " - Notepad") 
-            self.text_area.delete(1.0,END) 
-  
-            file = open(self.__file,"r") 
-  
-            self.text_area.insert(1.0,file.read()) 
-  
-            file.close() 
+            self.set_from_file(self.__file)
+        
+    def set_from_file(self, file_name):
+        self.root.title(os.path.basename(file_name) + " - Notepad") 
+        self.text_area.delete(1.0,END) 
+
+        in_file = open(file_name,"r") 
+
+        self.text_area.insert(1.0,in_file.read()) 
+
+        in_file.close() 
   
     def new_file(self): 
         self.root.title("Untitled - Notepad") 
