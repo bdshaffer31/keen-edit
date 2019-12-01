@@ -10,13 +10,12 @@ TODO for IDE development:
  - interpretor for unicode characters?
  - saved / unsaved changes tracker at top of editor
  - automatic syntax highlighting
- - add open console to view menu
-	- involves adding view menu
  - font options
  - auto indent
  - control z undo, control y redo 
  - add icon
  - change color theme from menu
+ - change theme of root/menu based on selected color theme
 
 Completed:
  - ctrl + s, ctrl + o save and open
@@ -26,6 +25,9 @@ Completed:
 	- restore workspace
  - open multiple windows
  - better coloring for syntax highlight
+ - add open console to view menu
+	- involves adding view menu
+
 
 
 

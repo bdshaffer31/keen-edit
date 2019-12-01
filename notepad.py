@@ -91,6 +91,7 @@ class Notepad:
         self.text_area.configure(background = self.color_set.background_color)
         self.text_area.configure(selectbackground  = self.color_set.select_color)
         self.text_area.configure(foreground = self.color_set.main_text_color)
+        self.text_area.configure(insertbackground = self.color_set.main_text_color)
 
         # add file menu options and then add to menu bar 
         self.file_menu.add_command(label = 'New', command=self.new_file)   
@@ -220,6 +221,8 @@ class Notepad:
         self.text_area.insert(1.0,in_file.read()) 
 
         in_file.close() 
+
+        self.syntax_highlight()
   
     def new_file(self): 
         self.root.title("Untitled - Notepad") 

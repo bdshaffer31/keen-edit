@@ -15,16 +15,16 @@ class ColorSet:
     # self.unaccent_color
 
     def set_solarized(self):
-        slate  =  '#778899'
+        darker_gains  =  '#bfbfbf'
         gainsboro = '#DCDCDC'
-        base02 =  '#073642'
-        base01 =  '#586e75'
-        base03 =  '#002b36'
-        base00 =  '#657b83'
-        base0  =  '#839496'
-        base1  =  '#93a1a1'
-        base2  =  '#eee8d5'
-        base3  =  '#fdf6e3'
+        base02 =  '#073642' #black?
+        dark_grey =  '#586e75' #dark grey
+        dark_blue =  '#004a5d' # dark dark blue #002b36
+        soft_slate =  '#657b83' #slate ish v similiar to base01
+        base0  =  '#839496' #slightly different light grey
+        base1  =  '#93a1a1' #lighter grey
+        tan  =  '#eee8d5' #light tan
+        base3  =  '#fdf6e3' #lighter tan
         yellow =  '#b58900'
         orange =  '#cb4b16'
         red    =  '#dc322f'
@@ -35,21 +35,22 @@ class ColorSet:
         green  =  '#859900'
 
         self.background_color = gainsboro #dark_brown1
-        self.main_text_color = '' #tan
-        self.accent1_color   = '' #pale_plum
-        self.accent2_color   = '' #rosey_pink
-        self.accent3_color   = '' #slate_foam
-        self.accent4_color   = '' #pumpkin
-        self.accent5_color   = '' #olive
-        self.accent6_color   = '' #light_moss
-        self.accent7_color   = '' #light_orange
-        self.unaccent_color  = '' #light_brown
+        self.select_color  = darker_gains
+
+        self.main_text_color = dark_blue #tan
+        self.accent1_color   = cyan #pale_plum
+        self.accent2_color   = magenta #rosey_pink
+        self.accent3_color   = red #slate_foam
+        self.accent4_color   = green #pumpkin
+        self.accent5_color   = violet #olive
+        self.accent6_color   = blue #light_moss
+        self.accent7_color   = orange #light_orange
+        self.unaccent_color  = soft_slate #light_brown
 
         self.pair_tokens_colors()
 
 
     def set_kimbie_dark(self):
-        gainsboro = '#DCDCDC'
         dark_brown0 = '#51412c'
         dark_brown1 = '#221a0f'
         light_brown = '#a57a4c'
@@ -64,6 +65,7 @@ class ColorSet:
 
         self.background_color = dark_brown1
         self.select_color  = dark_brown0
+
         self.main_text_color  = tan
         self.accent1_color    = pale_plum
         self.accent2_color    = rosey_pink
