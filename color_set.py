@@ -1,8 +1,20 @@
 
 class ColorSet:
 
-    def __init__(self):
-        # default theme
+    # Every color set should set these to color values
+    # self.background_color
+    # self.select_color
+    # self.main_text_color
+    # self.accent1_color
+    # self.accent2_color
+    # self.accent3_color
+    # self.accent4_color
+    # self.accent5_color
+    # self.accent6_color
+    # self.accent7_color
+    # self.unaccent_color
+
+    def set_solarized(self):
         slate  =  '#778899'
         gainsboro = '#DCDCDC'
         base02 =  '#073642'
@@ -22,103 +34,137 @@ class ColorSet:
         cyan   =  '#2aa198'
         green  =  '#859900'
 
-        self.background_color = gainsboro
+        self.background_color = gainsboro #dark_brown1
+        self.main_text_color = '' #tan
+        self.accent1_color   = '' #pale_plum
+        self.accent2_color   = '' #rosey_pink
+        self.accent3_color   = '' #slate_foam
+        self.accent4_color   = '' #pumpkin
+        self.accent5_color   = '' #olive
+        self.accent6_color   = '' #light_moss
+        self.accent7_color   = '' #light_orange
+        self.unaccent_color  = '' #light_brown
+
+        self.pair_tokens_colors()
+
+
+    def set_kimbie_dark(self):
+        gainsboro = '#DCDCDC'
+        dark_brown0 = '#51412c'
+        dark_brown1 = '#221a0f'
+        light_brown = '#a57a4c'
+        tan = '#d3af86'
+        pale_plum = '#98676a'
+        rosey_pink = '#dc3958'
+        slate_foam = '#8ab1b0'
+        pumpkin = '#f06431'
+        olive = '#7e602c'
+        light_moss = '#889b4a'
+        light_orange = '#f79a32'
+
+        self.background_color = dark_brown1
+        self.select_color  = dark_brown0
+        self.main_text_color  = tan
+        self.accent1_color    = pale_plum
+        self.accent2_color    = rosey_pink
+        self.accent3_color    = slate_foam
+        self.accent4_color    = pumpkin
+        self.accent5_color    = olive
+        self.accent6_color    = light_moss
+        self.accent7_color    = light_orange
+        self.unaccent_color   = light_brown
+
+        self.pair_tokens_colors()
         
+    def pair_tokens_colors(self):
         self.token_colors = {
-            'Token.Keyword':               base02, 
-            'Token.Keyword.Constant':      base02, 
-            'Token.Keyword.Declaration':   base02, 
-            'Token.Keyword.Namespace':     base02, 
-            'Token.Keyword.Pseudo':        base02, 
-            'Token.Keyword.Reserved':      base02,
-            'Token.Keyword.Type':          base02,
+            'Token.Keyword':               self.accent1_color, 
+            'Token.Keyword.Constant':      self.accent1_color, 
+            'Token.Keyword.Declaration':   self.accent1_color, 
+            'Token.Keyword.Namespace':     self.accent1_color, 
+            'Token.Keyword.Pseudo':        self.accent1_color, 
+            'Token.Keyword.Reserved':      self.accent1_color,
+            'Token.Keyword.Type':          self.accent1_color,
 
-            'Token.Name':                  cyan,
-            'Token.Name.Attribute':        magenta,
-            'Token.Name.Builtin':          orange,
-            'Token.Name.Builtin.Pseudo':   base0,
-            'Token.Name.Class':            base0,
-            'Token.Name.Constant':         base2,
-            'Token.Name.Decorator':        base2,
-            'Token.Name.Entity':           base2,
-            'Token.Name.Exception':        base01, 
-            'Token.Name.Function':         red,
-            'Token.Name.Function.Magic':   base01,
-            'Token.Name.Label':            orange,
-            'Token.Name.Namespace':        orange,
-            'Token.Name.Other':            orange,
-            'Token.Name.Tag':              violet,
-            'Token.Name.Variable':         violet,
-            'Token.Name.Variable.Class':   violet,
-            'Token.Name.Variable.Global':  magenta,
-            'Token.Name.Variable.Instance':magenta,
-            'Token.Name.Variable.Magic':   magenta,
+            'Token.Name':                  self.main_text_color,
+            'Token.Name.Attribute':        self.accent2_color,
+            'Token.Name.Builtin':          self.accent2_color,
+            'Token.Name.Builtin.Pseudo':   self.accent2_color,
+            'Token.Name.Class':            self.accent4_color,
+            'Token.Name.Constant':         self.accent2_color,
+            'Token.Name.Decorator':        self.accent2_color,
+            'Token.Name.Entity':           self.accent2_color,
+            'Token.Name.Exception':        self.accent2_color, 
+            'Token.Name.Function':         self.accent3_color,
+            'Token.Name.Function.Magic':   self.accent5_color,
+            'Token.Name.Label':            self.accent2_color,
+            'Token.Name.Namespace':        self.accent2_color,
+            'Token.Name.Other':            self.accent2_color,
+            'Token.Name.Tag':              self.accent2_color,
+            'Token.Name.Variable':         self.accent2_color,
+            'Token.Name.Variable.Class':   self.accent2_color,
+            'Token.Name.Variable.Global':  self.accent2_color,
+            'Token.Name.Variable.Instance':self.accent2_color,
+            'Token.Name.Variable.Magic':   self.accent2_color,
 
-            'Token.Literal':               magenta,
-            'Token.Literal.Date':          magenta,
+            'Token.Literal':               self.accent1_color,
+            'Token.Literal.Date':          self.accent1_color,
+            'Token.Literal.String.Single': self.accent6_color,
+            'Token.Literal.String.Double': self.accent6_color,
+            'Token.Literal.String.Interpol':self.accent7_color,
+            
+            'Token.String':                self.accent6_color,
+            'Token.String.Affix':          self.accent6_color,
+            'Token.String.Backtick':       self.accent6_color,
+            'Token.String.Char':           self.accent6_color,
+            'Token.String.Delimiter':      self.accent6_color,
+            'Token.String.Doc':            self.accent6_color,
+            'Token.String.Double':         self.accent6_color,
+            'Token.String.Escape':         self.accent6_color,
+            'Token.String.Heredoc':        self.accent6_color,
+            'Token.String.Interpol':       self.accent6_color,
+            'Token.String.Other':          self.accent6_color,
+            'Token.String.Regex':          self.accent6_color,
+            'Token.String.Single':         self.accent6_color,
+            'Token.String.Symbol':         self.accent6_color,
 
-            'Token.String':                violet,
-            'Token.String.Affix':          violet,
-            'Token.String.Backtick':       violet,
-            'Token.String.Char':           violet,
-            'Token.String.Delimiter':      violet,
-            'Token.String.Doc':            violet,
-            'Token.String.Double':         violet,
-            'Token.String.Escape':         violet,
-            'Token.String.Heredoc':        violet,
-            'Token.String.Interpol':       violet,
-            'Token.String.Other':          violet,
-            'Token.String.Regex':          violet,
-            'Token.String.Single':         violet,
-            'Token.String.Symbol':         violet,
+            'Token.Literal.Number':        self.accent7_color,
+            'Token.Literal.Number.Bin':    self.accent7_color,
+            'Token.Literal.Number.Float':  self.accent7_color,
+            'Token.Literal.Number.Hex':    self.accent7_color,
+            'Token.Literal.Number.Integer.Long':self.accent7_color,
+            'Token.Literal.Number.Integer':self.accent7_color,
+            'Token.Literal.Number.Oct':    self.accent7_color,
+            'Token.Literal.Number.Integer':self.accent7_color,
+            'Token.Number':                self.accent7_color,
+            'Token.Number.Bin':            self.accent7_color,
+            'Token.Number.Float':          self.accent7_color,
+            'Token.Number.Hex':            self.accent7_color,
+            'Token.Number.Integer':        self.accent7_color,
+            'Token.Number.Integer.Long':   self.accent7_color,
+            'Token.Number.Oct':            self.accent7_color,
 
-            'Token.Number':                blue,
-            'Token.Number.Bin':            blue,
-            'Token.Number.Float':          blue,
-            'Token.Number.Hex':            blue,
-            'Token.Number.Integer':        blue,
-            'Token.Number.Integer.Long':   blue,
-            'Token.Number.Oct':            blue,
+            'Token.Operator':              self.accent6_color,
+            'Token.Operator.Word':         self.accent6_color,
 
-            'Token.Operator':              green,
-            'Token.Operator.Word':         green,
+            'Token.Punctuation':           self.main_text_color,
 
-            'Token.Punctuation':           base00,
+            'Token.Comment':               self.unaccent_color,
+            'Token.Comment.Hashbang':      self.unaccent_color,
+            'Token.Comment.Multiline':     self.unaccent_color,
+            'Token.Comment.Preproc':       self.unaccent_color,
+            'Token.Comment.Single':        self.unaccent_color,
+            'Token.Comment.Special':       self.unaccent_color,
 
-            'Token.Comment':               base03,
-            'Token.Comment.Hashbang':      base03,
-            'Token.Comment.Multiline':     base03,
-            'Token.Comment.Preproc':       base03,
-            'Token.Comment.Single':        base03,
-            'Token.Comment.Special':       base03,
-
-            'Token.Generic':               red,
-            'Token.Generic.Deleted':       red,
-            'Token.Generic.Emph':          red,
-            'Token.Generic.Error':         red,
-            'Token.Generic.Heading':       red,
-            'Token.Generic.Inserted':      red,
-            'Token.Generic.Output':        red,
-            'Token.Generic.Prompt':        red,
-            'Token.Generic.Strong':        red,
-            'Token.Generic.Subheading':    red,
-            'Token.Generic.Traceback':     red, 
+            'Token.Generic':               self.accent3_color,
+            'Token.Generic.Deleted':       self.accent3_color,
+            'Token.Generic.Emph':          self.accent3_color,
+            'Token.Generic.Error':         self.accent3_color,
+            'Token.Generic.Heading':       self.accent3_color,
+            'Token.Generic.Inserted':      self.accent3_color,
+            'Token.Generic.Output':        self.accent3_color,
+            'Token.Generic.Prompt':        self.accent3_color,
+            'Token.Generic.Strong':        self.accent3_color,
+            'Token.Generic.Subheading':    self.accent3_color,
+            'Token.Generic.Traceback':     self.accent3_color, 
         }
-
-    def set_solarized(self):
-        self.base02 =  '#073642'
-        self.base01 =  '#586e75'
-        self.base03 =  '#002b36'
-        self.base00 =  '#657b83'
-        self.base0  =  '#839496'
-        self.base1  =  '#93a1a1'
-        self.base2  =  '#eee8d5'
-        self.base3  =  '#fdf6e3'
-        self.yellow =  '#b58900'
-        self.orange =  '#cb4b16'
-        self.red    =  '#dc322f'
-        self.magenta = '#d33682'
-        self.violet =  '#6c71c4'
-        self.blue   =  '#268bd2'
-        self.cyan   =  '#2aa198'
-        self.green  =  '#859900'

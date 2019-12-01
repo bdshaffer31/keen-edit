@@ -1,6 +1,5 @@
 TODO for IDE development:
  - Pylint python code
- - better coloring for syntax highlight
  - file explorer that opens in current directory
  - open folder option that allows a directory to be open
  - multiple tabs to switch between
@@ -10,21 +9,23 @@ TODO for IDE development:
  - git integration via cmder
  - interpretor for unicode characters?
  - saved / unsaved changes tracker at top of editor
-
+ - automatic syntax highlighting
  - add open console to view menu
 	- involves adding view menu
  - font options
  - auto indent
  - control z undo, control y redo 
  - add icon
+ - change color theme from menu
 
 Completed:
  - ctrl + s, ctrl + o save and open
- - syntax highlightning using pygment
+ - syntax highlightning using pygment from button press
  - tab as four spaces ;)
  - open last open file when re-oening
 	- restore workspace
  - open multiple windows
+ - better coloring for syntax highlight
 
 
 

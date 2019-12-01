@@ -42,8 +42,8 @@ class Notepad:
     __file = None
   
     def __init__(self,**kwargs): 
-
         self.color_set = ColorSet()
+        self.color_set.set_kimbie_dark()
         self.unsaved_changes = False
         self.run_path = os.path.abspath('notepad.py')
         # Set icon 
@@ -77,7 +77,7 @@ class Notepad:
         top = (screenHeight / 2) - (self.height /2)  
 
         # For top and bottom 
-        self.root.geometry('%dx%d+%d+%d' % (self.width, self.height, left, top)) 
+        self.root.geometry(f'{self.width}x{self.height}+{int(left)}+{int(top)}')
 
         # To make the textarea auto resizable 
         self.root.grid_rowconfigure(0, weight=1) 
@@ -86,36 +86,38 @@ class Notepad:
         # Add controls (widget) 
         self.text_area.grid(sticky = N + E + S + W) 
 
-        # set tab to four spaces
-        self.text_area.bind("<Tab>", self.tab)
+        # text area configurations
+        self.text_area.bind('<Tab>', self.tab)
         self.text_area.configure(background = self.color_set.background_color)
+        self.text_area.configure(selectbackground  = self.color_set.select_color)
+        self.text_area.configure(foreground = self.color_set.main_text_color)
 
         # add file menu options and then add to menu bar 
-        self.file_menu.add_command(label="New", command=self.new_file)   
-        self.file_menu.add_command(label="Open", command=self.open_file) 
-        self.file_menu.add_command(label="Save", command=self.save_file)            
+        self.file_menu.add_command(label = 'New', command=self.new_file)   
+        self.file_menu.add_command(label = 'Open', command=self.open_file) 
+        self.file_menu.add_command(label = 'Save', command=self.save_file)            
         self.file_menu.add_separator()                                          
-        self.file_menu.add_command(label="Exit", command=self.quit_application) 
+        self.file_menu.add_command(label = 'Exit', command=self.quit_application) 
 
-        self.menu_bar.add_cascade(label="File", menu=self.file_menu)  
+        self.menu_bar.add_cascade(label = 'File', menu=self.file_menu)  
 
         # Add copy paste cut into edit menu and add edit menu to bar
-        self.edit_menu.add_command(label="Cut", command=self.__cut)    
-        self.edit_menu.add_command(label="Copy", command=self.__copy)
-        self.edit_menu.add_command(label="Paste", command=self.__paste)
-        self.edit_menu.add_command(label="Read", command=self.read_text_input)
+        self.edit_menu.add_command(label = 'Cut', command=self.__cut)    
+        self.edit_menu.add_command(label = 'Copy', command=self.__copy)
+        self.edit_menu.add_command(label = 'Paste', command=self.__paste)
+        self.edit_menu.add_command(label = 'Read', command=self.read_text_input)
 
-        self.menu_bar.add_cascade(label="Edit", menu = self.edit_menu)
+        self.menu_bar.add_cascade(label='Edit', menu = self.edit_menu)
 
         # add view menu features and then add to menu bar
-        self.view_menu.add_command(label = "Open Console", command = self.open_console)
-        self.view_menu.add_command(label = "Syntax Highlight", command = self.syntax_highlight)
-        self.view_menu.add_command(label = "New Window", command = self.open_new_window)
-        self.menu_bar.add_cascade(label = "View", menu = self.view_menu)
+        self.view_menu.add_command(label = 'Open Console', command = self.open_console)
+        self.view_menu.add_command(label = 'Syntax Highlight', command = self.syntax_highlight)
+        self.view_menu.add_command(label = 'New Window', command = self.open_new_window)
+        self.menu_bar.add_cascade(label = 'View', menu = self.view_menu)
 
         # To create a feature of description of the notepad 
-        self.help_menu.add_command(label="About Notepad", command=self.__showAbout)  
-        self.menu_bar.add_cascade(label="Help", menu=self.help_menu) 
+        self.help_menu.add_command(label = 'About Notepad', command=self.__showAbout)  
+        self.menu_bar.add_cascade(label = 'Help', menu=self.help_menu) 
 
 	    # adding menu bar to root and filling in right side?
         self.root.config(menu=self.menu_bar) 
@@ -129,13 +131,13 @@ class Notepad:
         self.root.bind("<Button-3>", self.popup)
 
         # Setup pop up menu
-        self.popup_menu.add_command(label="Cut", command=self.__cut)
-        self.popup_menu.add_command(label="Copy", command=self.__copy)
-        self.popup_menu.add_command(label="Paste", command=self.__paste)
+        self.popup_menu.add_command(label='Cut', command=self.__cut)
+        self.popup_menu.add_command(label='Copy', command=self.__copy)
+        self.popup_menu.add_command(label='Paste', command=self.__paste)
 
         # Save and open on keyboard showrtcuts
-        self.text_area.bind("<Control-s>", self.save_file_event)
-        self.text_area.bind("<Control-o>", self.open_file_event)    
+        self.text_area.bind('<Control-s>', self.save_file_event)
+        self.text_area.bind('<Control-o>', self.open_file_event)    
 
         # set text area and header to last opened file
         file_name = self.read_last_opened()
@@ -147,10 +149,9 @@ class Notepad:
         # exit() 
   
     def __showAbout(self): 
-        showinfo("Notepad","Benjamin Shaffer") 
+        showinfo('Notepad','Benjamin Shaffer') 
 
     def on_close_root(self):
-        print('on_close called')
         latest_file = open('latest_file.txt', 'w')
         if self.__file:
             current_path = os.path.abspath(self.__file)
@@ -188,7 +189,8 @@ class Notepad:
 
         self.text_area.delete('1.0', END)
         for token, content in lex(data, PythonLexer()):
-            
+            #print(content)
+            #print(token)
             #self.text_area.mark_set("range_end", "range_start + %dc" % len(content))
             self.text_area.insert(END, content, str(token))
             #self.text_area.mark_set("range_start", "range_end")
@@ -282,6 +284,6 @@ class Notepad:
 
   
 # Run main application 
-notepad = Notepad(width=500,height=600) 
+notepad = Notepad(width=800,height=700) 
 notepad.run() 
 
