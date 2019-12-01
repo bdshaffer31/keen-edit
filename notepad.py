@@ -45,7 +45,7 @@ class Notepad:
 
         self.color_set = ColorSet()
         self.unsaved_changes = False
-
+        self.run_path = os.path.abspath('notepad.py')
         # Set icon 
         try: 
             self.root.wm_iconbitmap("Notepad.ico")  
@@ -110,6 +110,7 @@ class Notepad:
         # add view menu features and then add to menu bar
         self.view_menu.add_command(label = "Open Console", command = self.open_console)
         self.view_menu.add_command(label = "Syntax Highlight", command = self.syntax_highlight)
+        self.view_menu.add_command(label = "New Window", command = self.open_new_window)
         self.menu_bar.add_cascade(label = "View", menu = self.view_menu)
 
         # To create a feature of description of the notepad 
@@ -168,6 +169,8 @@ class Notepad:
         else:
             return False
 
+    def open_new_window(self):
+        os.system(f'start {self.run_path}')
 
     def open_console(self):
         terminal = TerminalInterface()
