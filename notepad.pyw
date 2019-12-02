@@ -1,5 +1,6 @@
 import tkinter
 import os
+import sys
 from tkinter import * #is this even necessary?
 # To get the space above for message 
 from tkinter.messagebox import *
@@ -42,14 +43,14 @@ class Notepad:
     # To add scrollbar 
     yscroll_bar = Scrollbar(text_area)
     xscroll_bar = Scrollbar(text_area, orient = HORIZONTAL)      
-    __file = None
+    file = None
   
     def __init__(self,**kwargs): 
         self.color_set = ColorSet()
         self.color_set.set_kimbie_dark()
         self.unsaved_changes = False
-        self.file_explorer = FileExplorer()
-        self.run_path = os.path.abspath('notepad.py')
+        self.run_path = os.path.abspath('notepad.pyw')
+        
         # Set icon 
         try: 
             self.root.wm_iconbitmap("Notepad.ico")  
@@ -118,7 +119,7 @@ class Notepad:
         self.view_menu.add_command(label = 'Open Console', command = self.open_console)
         self.view_menu.add_command(label = 'Syntax Highlight', command = self.syntax_highlight)
         self.view_menu.add_command(label = 'New Window', command = self.open_new_window)
-        self.view_menu.add_command(label = 'File Explorer', command = self.file_explorer.open_file_explorer)
+        self.view_menu.add_command(label = 'File Explorer', command = self.open_file_exp)
         self.menu_bar.add_cascade(label = 'View', menu = self.view_menu)
 
         # To create a feature of description of the notepad 
@@ -149,9 +150,22 @@ class Notepad:
         self.text_area.bind('<Control-o>', self.open_file_event)    
 
         # set text area and header to last opened file
-        file_name = self.read_last_opened()
-        if file_name:
-            self.set_from_file(file_name)    
+        try:
+            file_name = kwargs['file_path']
+            self.set_from_file(file_name)
+            self.file = file_name
+            self.open_directory = os.path.dirname(self.file)
+        except KeyError:
+            file_name = self.read_last_opened()
+            if file_name:
+                self.set_from_file(file_name)    
+                
+
+        try: #issue opening from empty
+            self.file_explorer = FileExplorer(self.run_path, self.open_directory)
+        except AttributeError:
+            print('no directory')
+
 
     def quit_application(self): 
         self.root.destroy() 
@@ -162,8 +176,8 @@ class Notepad:
 
     def on_close_root(self):
         latest_file = open('latest_file.txt', 'w')
-        if self.__file:
-            current_path = os.path.abspath(self.__file)
+        if self.file:
+            current_path = os.path.abspath(self.file)
             latest_file.write(current_path)
         else:
             latest_file.write('')
@@ -178,6 +192,13 @@ class Notepad:
             return last_line
         else:
             return False
+
+    def open_file_exp(self):
+        try:
+            self.file_explorer.set_file_path(self.file)
+        except TypeError:
+            print('no open file')
+        self.file_explorer.open_file_explorer()
 
     def open_new_window(self):
         os.system(f'start {self.run_path}')
@@ -208,33 +229,34 @@ class Notepad:
         self.open_file()
   
     def open_file(self):
-        self.__file = askopenfilename(defaultextension=".txt", 
+        file_path = askopenfilename(defaultextension=".txt", 
                                         filetypes=[("All Files","*.*"), 
                                         ("Text Documents","*.txt")]) 
   
-        if self.__file == "": 
+        if file_path == "": 
             # no file to open 
-            self.__file = None
+            self.file = None
         else: 
             # Try to open the file 
             # set the window title 
-            self.set_from_file(self.__file)
+            self.set_from_file(file_path)
         
     def set_from_file(self, file_name):
         self.root.title(os.path.basename(file_name) + " - Notepad") 
         self.text_area.delete(1.0,END) 
 
-        in_file = open(file_name,"r") 
-
+        in_file = open(file_name,"r")
         self.text_area.insert(1.0,in_file.read()) 
+        in_file.close()         
 
-        in_file.close() 
+        self.file = file_name
+        self.open_directory = os.path.dirname(self.file)
 
         self.syntax_highlight()
   
     def new_file(self): 
         self.root.title("Untitled - Notepad") 
-        self.__file = None
+        self.file = None
         self.text_area.delete(1.0,END) 
 
     def read_text_input(self):
@@ -249,26 +271,27 @@ class Notepad:
         self.save_file()
   
     def save_file(self): 
-        if self.__file == None: 
+        if self.file == None: 
             # Save as new file 
-            self.__file = asksaveasfilename(initialfile='Untitled.txt', 
+            self.file = asksaveasfilename(initialfile='Untitled.txt', 
                                             defaultextension=".txt", 
                                             filetypes=[("All Files","*.*"), 
                                                 ("Text Documents","*.txt")]) 
-            if self.__file == "": 
-                self.__file = None
+            if self.file == "": 
+                self.file = None
             else:   
                 # Try to save the file 
-                file = open(self.__file,"w") 
+                file = open(self.file,"w") 
                 file.write(self.text_area.get(1.0,END)) 
                 file.close() 
                   
                 # Change the window title 
-                self.root.title(os.path.basename(self.__file) + " - Notepad")    
+                self.root.title(os.path.basename(self.file) + " - Notepad")    
         else: 
-            file = open(self.__file,"w") 
+            file = open(self.file,"w") 
             file.write(self.text_area.get(1.0,END)) 
             file.close() 
+        self.syntax_highlight()
 
     def tab(self, arg):
         self.text_area.insert(INSERT, " " * 4)
@@ -295,6 +318,13 @@ class Notepad:
 
   
 # Run main application 
-notepad = Notepad(width=800,height=700) 
-notepad.run() 
+try:
+    path_input = sys.argv[1]
+    notepad = Notepad(width = 800, height = 700, file_path = path_input)
+    notepad.run()
+except IndexError:
+    print('no input file')
+    notepad = Notepad(width = 800, height = 700)
+    notepad.run()
+
 

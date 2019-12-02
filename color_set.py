@@ -130,7 +130,6 @@ class ColorSet:
             'Token.Literal.Number.Integer.Long':self.accent7_color,
             'Token.Literal.Number.Integer':self.accent7_color,
             'Token.Literal.Number.Oct':    self.accent7_color,
-            'Token.Literal.Number.Integer':self.accent7_color,
             'Token.Number':                self.accent7_color,
             'Token.Number.Bin':            self.accent7_color,
             'Token.Number.Float':          self.accent7_color,

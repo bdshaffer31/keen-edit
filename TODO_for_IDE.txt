@@ -1,7 +1,7 @@
 TODO for IDE development:
  - Pylint python code
- - file explorer that opens in current directory
  - open folder option that allows a directory to be open
+ - file explorer functionality
  - multiple tabs to switch between
  - terminal stays within tkinter
 	- or at least is resized reasonably
@@ -16,6 +16,9 @@ TODO for IDE development:
  - add icon
  - change color theme from menu
  - change theme of root/menu based on selected color theme
+ - scroll bars dont show when not needed
+ - issues changing directories
+ - run file from file explorer without hierarchy and freezing
 
 Completed:
  - ctrl + s, ctrl + o save and open
@@ -28,6 +31,7 @@ Completed:
  - add open console to view menu
 	- involves adding view menu
  - text doesn't wrap
+ - file explorer that opens in current directory
 
 
 
