@@ -1,49 +1,60 @@
+''' a module used by Notepad to set up color themes '''
 
 class ColorSet:
+    ''' ColorSet class that tracks colors and pairs them to tokens '''
 
-    # Every color set should set these to color values
-    # self.background_color
-    # self.select_color
-    # self.main_text_color
-    # self.accent1_color
-    # self.accent2_color
-    # self.accent3_color
-    # self.accent4_color
-    # self.accent5_color
-    # self.accent6_color
-    # self.accent7_color
-    # self.unaccent_color
+    def __init__(self):
+        ''' initialize a color set '''
+
+        # Every color set should set these to color values
+        self.background_color = ''
+        self.select_color = ''
+        self.main_text_color = ''
+        self.accent1_color = ''
+        self.accent2_color = ''
+        self.accent3_color = ''
+        self.accent4_color = ''
+        self.accent5_color = ''
+        self.accent6_color = ''
+        self.accent7_color = ''
+        self.unaccent_color = ''
+
+        self.token_colors = {}
 
     def set_solarized(self):
-        darker_gains  =  '#bfbfbf'
+        ''' sets up a simple grey - blue color theme '''
+
+        darker_gains = '#bfbfbf'
         gainsboro = '#DCDCDC'
-        dark_blue =  '#004a5d' # dark dark blue #002b36
-        soft_slate =  '#657b83' #slate ish v similiar to base01
-        orange =  '#cb4b16'
-        red    =  '#dc322f'
+        dark_blue = '#004a5d' # dark dark blue #002b36
+        soft_slate = '#657b83' #slate ish v similiar to base01
+        orange = '#cb4b16'
+        red = '#dc322f'
         magenta = '#d33682'
-        violet =  '#6c71c4'
-        blue   =  '#268bd2'
-        cyan   =  '#2aa198'
-        green  =  '#859900'
+        violet = '#6c71c4'
+        blue = '#268bd2'
+        cyan = '#2aa198'
+        green = '#859900'
 
-        self.background_color = gainsboro #dark_brown1
-        self.select_color  = darker_gains
+        self.background_color = gainsboro
+        self.select_color = darker_gains
 
-        self.main_text_color = dark_blue #tan
-        self.accent1_color   = cyan #pale_plum
-        self.accent2_color   = magenta #rosey_pink
-        self.accent3_color   = red #slate_foam
-        self.accent4_color   = green #pumpkin
-        self.accent5_color   = violet #olive
-        self.accent6_color   = blue #light_moss
-        self.accent7_color   = orange #light_orange
-        self.unaccent_color  = soft_slate #light_brown
+        self.main_text_color = dark_blue
+        self.accent1_color = cyan
+        self.accent2_color = magenta
+        self.accent3_color = red
+        self.accent4_color = green
+        self.accent5_color = violet
+        self.accent6_color = blue
+        self.accent7_color = orange
+        self.unaccent_color = soft_slate
 
         self.pair_tokens_colors()
 
 
     def set_kimbie_dark(self):
+        ''' sets up the kimbie dark color theme '''
+
         dark_brown0 = '#51412c'
         dark_brown1 = '#221a0f'
         light_brown = '#a57a4c'
@@ -57,27 +68,28 @@ class ColorSet:
         light_orange = '#f79a32'
 
         self.background_color = dark_brown1
-        self.select_color  = dark_brown0
+        self.select_color = dark_brown0
 
-        self.main_text_color  = tan
-        self.accent1_color    = pale_plum
-        self.accent2_color    = rosey_pink
-        self.accent3_color    = slate_foam
-        self.accent4_color    = pumpkin
-        self.accent5_color    = olive
-        self.accent6_color    = light_moss
-        self.accent7_color    = light_orange
-        self.unaccent_color   = light_brown
+        self.main_text_color = tan
+        self.accent1_color = pale_plum
+        self.accent2_color = rosey_pink
+        self.accent3_color = slate_foam
+        self.accent4_color = pumpkin
+        self.accent5_color = olive
+        self.accent6_color = light_moss
+        self.accent7_color = light_orange
+        self.unaccent_color = light_brown
 
         self.pair_tokens_colors()
-        
+
     def pair_tokens_colors(self):
+        ''' pair the currently selected color theme to the tokens '''
         self.token_colors = {
-            'Token.Keyword':               self.accent1_color, 
-            'Token.Keyword.Constant':      self.accent1_color, 
-            'Token.Keyword.Declaration':   self.accent1_color, 
-            'Token.Keyword.Namespace':     self.accent1_color, 
-            'Token.Keyword.Pseudo':        self.accent1_color, 
+            'Token.Keyword':               self.accent1_color,
+            'Token.Keyword.Constant':      self.accent1_color,
+            'Token.Keyword.Declaration':   self.accent1_color,
+            'Token.Keyword.Namespace':     self.accent1_color,
+            'Token.Keyword.Pseudo':        self.accent1_color,
             'Token.Keyword.Reserved':      self.accent1_color,
             'Token.Keyword.Type':          self.accent1_color,
 
@@ -89,7 +101,7 @@ class ColorSet:
             'Token.Name.Constant':         self.accent2_color,
             'Token.Name.Decorator':        self.accent2_color,
             'Token.Name.Entity':           self.accent2_color,
-            'Token.Name.Exception':        self.accent2_color, 
+            'Token.Name.Exception':        self.accent2_color,
             'Token.Name.Function':         self.accent3_color,
             'Token.Name.Function.Magic':   self.accent5_color,
             'Token.Name.Label':            self.accent2_color,
@@ -107,7 +119,7 @@ class ColorSet:
             'Token.Literal.String.Single': self.accent6_color,
             'Token.Literal.String.Double': self.accent6_color,
             'Token.Literal.String.Interpol':self.accent7_color,
-            
+
             'Token.String':                self.accent6_color,
             'Token.String.Affix':          self.accent6_color,
             'Token.String.Backtick':       self.accent6_color,
@@ -160,5 +172,5 @@ class ColorSet:
             'Token.Generic.Prompt':        self.accent3_color,
             'Token.Generic.Strong':        self.accent3_color,
             'Token.Generic.Subheading':    self.accent3_color,
-            'Token.Generic.Traceback':     self.accent3_color, 
+            'Token.Generic.Traceback':     self.accent3_color,
         }

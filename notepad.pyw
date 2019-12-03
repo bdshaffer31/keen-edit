@@ -53,7 +53,7 @@ class Notepad:
         # Set icon
         try:
             self.root.wm_iconbitmap("Notepad.ico")
-        except:
+        except TclError:
             print('icon not found')
 
         # Set window size (the default is 300x300)
@@ -249,7 +249,7 @@ class Notepad:
     def new_file(self):
         self.root.title('Untitled - Notepad')
         self.file = None
-        self.text_area.delete(1.0,END)
+        self.text_area.delete(1.0, END)
 
     def read_text_input(self):
         text_read = self.text_area.get('1.0', 'end-1c')
@@ -291,7 +291,7 @@ class Notepad:
 
     def __cut(self):
         self.text_area.event_generate('<<Cut>>')
-  
+
     def __copy(self):
         self.text_area.event_generate('<<Copy>>')
 
@@ -309,13 +309,16 @@ class Notepad:
         self.root.mainloop()
 
 
-# Run main application
+# get input from system if its there
 try:
-    path_input = sys.argv[1]
-    notepad = Notepad(width=800, height=700, file_path=path_input)
-    notepad.run()
+    PATH_INPUT = sys.argv[1]
 except IndexError:
-    print('no input file')
-    notepad = Notepad(width=800, height=700)
-    notepad.run()
+    PATH_INPUT = None
 
+# run main application
+if PATH_INPUT is not None:
+    NOTEPAD = Notepad(width=800, height=700, file_path=PATH_INPUT)
+    NOTEPAD.run()
+else:
+    NOTEPAD = Notepad(width=800, height=700)
+    NOTEPAD.run()

@@ -26,6 +26,7 @@ TODO for IDE development:
  - run via drop down
  - not show files that can't be opened
  - give option to delete, create and move files within open directory
+ - color theme should use dictionary for colors, too many attributes
 
 Completed:
  - ctrl + s, ctrl + o save and open
