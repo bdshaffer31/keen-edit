@@ -19,6 +19,13 @@ TODO for IDE development:
  - scroll bars dont show when not needed
  - issues changing directories
  - run file from file explorer without hierarchy and freezing
+ - syntax highlight based on file extension
+ - color code file explorer by theme (needs to not be owned by notepad)
+    - suggests need for 'session' object to store all running and variables
+ - base console root on current directory
+ - run via drop down
+ - not show files that can't be opened
+ - give option to delete, create and move files within open directory
 
 Completed:
  - ctrl + s, ctrl + o save and open
@@ -32,10 +39,4 @@ Completed:
 	- involves adding view menu
  - text doesn't wrap
  - file explorer that opens in current directory
-
-
-
-
-
-
 

@@ -50,6 +50,7 @@ class Notepad:
         self.color_set.set_kimbie_dark()
         self.unsaved_changes = False
         self.run_path = os.path.abspath('notepad.pyw')
+        self.file_explorer = FileExplorer(self.run_path)
         
         # Set icon 
         try: 
@@ -111,7 +112,6 @@ class Notepad:
         self.edit_menu.add_command(label = 'Cut', command=self.__cut)    
         self.edit_menu.add_command(label = 'Copy', command=self.__copy)
         self.edit_menu.add_command(label = 'Paste', command=self.__paste)
-        self.edit_menu.add_command(label = 'Read', command=self.read_text_input)
 
         self.menu_bar.add_cascade(label='Edit', menu = self.edit_menu)
 
@@ -153,18 +153,10 @@ class Notepad:
         try:
             file_name = kwargs['file_path']
             self.set_from_file(file_name)
-            self.file = file_name
-            self.open_directory = os.path.dirname(self.file)
         except KeyError:
             file_name = self.read_last_opened()
             if file_name:
                 self.set_from_file(file_name)    
-                
-
-        try: #issue opening from empty
-            self.file_explorer = FileExplorer(self.run_path, self.open_directory)
-        except AttributeError:
-            print('no directory')
 
 
     def quit_application(self): 
@@ -195,10 +187,10 @@ class Notepad:
 
     def open_file_exp(self):
         try:
-            self.file_explorer.set_file_path(self.file)
+            self.file_explorer.open_file_explorer(self.get_open_dir())
         except TypeError:
             print('no open file')
-        self.file_explorer.open_file_explorer()
+        
 
     def open_new_window(self):
         os.system(f'start {self.run_path}')
@@ -250,9 +242,11 @@ class Notepad:
         in_file.close()         
 
         self.file = file_name
-        self.open_directory = os.path.dirname(self.file)
 
         self.syntax_highlight()
+
+    def get_open_dir(self):
+        return os.path.dirname(self.file)
   
     def new_file(self): 
         self.root.title("Untitled - Notepad") 
@@ -326,5 +320,4 @@ except IndexError:
     print('no input file')
     notepad = Notepad(width = 800, height = 700)
     notepad.run()
-
 
