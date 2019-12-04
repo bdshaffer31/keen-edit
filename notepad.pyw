@@ -1,19 +1,16 @@
 import tkinter as tk
 import os
 import sys
-#from tkinter import * #is this even necessary?
 # To get the space above for message
-from tkinter.messagebox import *
+from tkinter.messagebox import showinfo
 # To get the dialog box to open when required
-from tkinter.filedialog import *
-import pygments
+from tkinter.filedialog import askopenfilename, asksaveasfilename
+from ctypes import windll
 from pygments import lex
 from pygments import highlight
 from pygments.lexers.python import PythonLexer
 
-import ctypes
-from ctypes import *
-from tkinter.tix import *
+
 
 from color_set import ColorSet
 from file_explorer import FileExplorer
@@ -21,7 +18,7 @@ from terminal_interface import TerminalInterface
 
 
 class Notepad:
-    root = Tk()
+    root = tk.Tk()
 
     # fixes the resolution
     windll.shcore.SetProcessDpiAwareness(1)
@@ -29,18 +26,18 @@ class Notepad:
     # default window width and height
     width = 400
     height = 500
-    text_area = Text(root, wrap="none")
-    menu_bar = Menu(root)
-    file_menu = Menu(menu_bar, tearoff=0)
-    edit_menu = Menu(menu_bar, tearoff=0)
-    view_menu = Menu(menu_bar, tearoff=0)
-    help_menu = Menu(menu_bar, tearoff=0)
+    text_area = tk.Text(root, wrap="none")
+    menu_bar = tk.Menu(root)
+    file_menu = tk.Menu(menu_bar, tearoff=0)
+    edit_menu = tk.Menu(menu_bar, tearoff=0)
+    view_menu = tk.Menu(menu_bar, tearoff=0)
+    help_menu = tk.Menu(menu_bar, tearoff=0)
 
-    popup_menu = Menu(menu_bar, tearoff=0)
+    popup_menu = tk.Menu(menu_bar, tearoff=0)
 
     # To add scrollbar
-    yscroll_bar = Scrollbar(text_area)
-    xscroll_bar = Scrollbar(text_area, orient=HORIZONTAL)
+    yscroll_bar = tk.Scrollbar(text_area)
+    xscroll_bar = tk.Scrollbar(text_area, orient=tk.HORIZONTAL)
     file = None
 
     def __init__(self, **kwargs):
@@ -53,7 +50,7 @@ class Notepad:
         # Set icon
         try:
             self.root.wm_iconbitmap("Notepad.ico")
-        except TclError:
+        except tk.TclError:
             print('icon not found')
 
         # Set window size (the default is 300x300)
@@ -88,7 +85,7 @@ class Notepad:
         self.root.grid_columnconfigure(0, weight=1)
 
         # Add controls (widget)
-        self.text_area.grid(sticky=N + E + S + W)
+        self.text_area.grid(sticky=tk.N + tk.E + tk.S + tk.W)
 
         # text area configurations
         self.text_area.bind('<Tab>', self.tab)
@@ -127,8 +124,8 @@ class Notepad:
 	    # adding menu bar to root
         self.root.config(menu=self.menu_bar)
 
-        self.yscroll_bar.pack(side=RIGHT, fill=Y)
-        self.xscroll_bar.pack(side=BOTTOM, fill=X)
+        self.yscroll_bar.pack(side=tk.RIGHT, fill=tk.Y)
+        self.xscroll_bar.pack(side=tk.BOTTOM, fill=tk.X)
         # Scrollbar will adjust automatically according to the content
         self.yscroll_bar.config(command=self.text_area.yview)
         self.xscroll_bar.config(command=self.text_area.xview)
@@ -207,12 +204,12 @@ class Notepad:
         # set up themes for highlighter
         self.config_syntax_theme()
 
-        self.text_area.delete('1.0', END)
+        self.text_area.delete('1.0', tk.END)
         for token, content in lex(data, PythonLexer()):
             #print(content)
             #print(token)
             #self.text_area.mark_set("range_end", "range_start + %dc" % len(content))
-            self.text_area.insert(END, content, str(token))
+            self.text_area.insert(tk.END, content, str(token))
             #self.text_area.mark_set("range_start", "range_end")
 
     def open_file_event(self, event):
@@ -233,7 +230,7 @@ class Notepad:
 
     def set_from_file(self, file_name):
         self.root.title(os.path.basename(file_name) + " - Notepad")
-        self.text_area.delete(1.0, END)
+        self.text_area.delete(1.0, tk.END)
 
         in_file = open(file_name, "r")
         self.text_area.insert(1.0, in_file.read())
@@ -245,19 +242,19 @@ class Notepad:
 
     def get_open_dir(self):
         return os.path.dirname(self.file)
-  
+
     def new_file(self):
         self.root.title('Untitled - Notepad')
         self.file = None
-        self.text_area.delete(1.0, END)
+        self.text_area.delete(1.0, tk.END)
 
     def read_text_input(self):
         text_read = self.text_area.get('1.0', 'end-1c')
         print(text_read)
 
     def set_text(self, value):
-        self.text_area.delete(1.0, END)
-        self.text_area.insert(END, value)
+        self.text_area.delete(1.0, tk.END)
+        self.text_area.insert(tk.END, value)
 
     def save_file_event(self, event):
         self.save_file()
@@ -274,19 +271,19 @@ class Notepad:
             else:
                 # Try to save the file
                 file = open(self.file, 'w')
-                file.write(self.text_area.get(1.0, END))
+                file.write(self.text_area.get(1.0, tk.END))
                 file.close()
 
                 # Change the window title
                 self.root.title(os.path.basename(self.file) + ' - Notepad')
         else:
             file = open(self.file, 'w')
-            file.write(self.text_area.get(1.0, END))
+            file.write(self.text_area.get(1.0, tk.END))
             file.close()
         self.syntax_highlight()
 
-    def tab(self, arg):
-        self.text_area.insert(INSERT, ' ' * 4)
+    def tab(self, event):
+        self.text_area.insert(tk.INSERT, ' ' * 4)
         return 'break'
 
     def __cut(self):
