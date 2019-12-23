@@ -1,4 +1,5 @@
 ''' used by Notepad to open file explorers '''
+# maybe should just be a module and not a class
 from tkinter import Toplevel, Listbox, END
 import os
 
