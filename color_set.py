@@ -174,3 +174,4 @@ class ColorSet:
             'Token.Generic.Subheading':    self.accent3_color,
             'Token.Generic.Traceback':     self.accent3_color,
         }
+

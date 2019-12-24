@@ -32,6 +32,7 @@ class Notepad:
     edit_menu = tk.Menu(menu_bar, tearoff=0)
     view_menu = tk.Menu(menu_bar, tearoff=0)
     help_menu = tk.Menu(menu_bar, tearoff=0)
+    font_menu = tk.Menu(menu_bar, tearoff=0)
 
     popup_menu = tk.Menu(menu_bar, tearoff=0)
 
@@ -46,6 +47,8 @@ class Notepad:
         self.unsaved_changes = False
         self.run_path = os.path.abspath('notepad.pyw')
         self.file_explorer = FileExplorer(self.run_path)
+        self.font_size = 10
+        self.font_style = 'Courier'
 
         # Set icon
         try:
@@ -117,11 +120,21 @@ class Notepad:
         self.view_menu.add_command(label='File Explorer', command=self.open_file_exp)
         self.menu_bar.add_cascade(label='View', menu=self.view_menu)
 
+        # add font menu features then add to menu bar
+        self.font_menu.add_command(label='Size Up', command = lambda: self.set_font(self.font_style, self.font_size+2))
+        self.font_menu.add_command(label='Size Down', command = lambda: self.set_font(self.font_style, self.font_size-2))
+        self.font_menu.add_separator()
+        self.font_menu.add_command(label='Helvetica', command = lambda: self.set_font('Helvetica', self.font_size))
+        self.font_menu.add_command(label='Courier', command = lambda: self.set_font('Courier', self.font_size))
+        self.font_menu.add_command(label='Times New Roman', command = lambda: self.set_font('Times New Roman', self.font_size))
+        self.font_menu.add_command(label='FixedSys', command = lambda: self.set_font('Fixedsys', self.font_size))
+        self.menu_bar.add_cascade(label='Font', menu=self.font_menu)
+
         # To create a feature of description of the notepad
         self.help_menu.add_command(label='About Notepad', command=self.__show_about)
         self.menu_bar.add_cascade(label='Help', menu=self.help_menu)
 
-	    # adding menu bar to root
+	# adding menu bar to root
         self.root.config(menu=self.menu_bar)
 
         self.yscroll_bar.pack(side=tk.RIGHT, fill=tk.Y)
@@ -193,6 +206,23 @@ class Notepad:
     def open_console(self):
         terminal = TerminalInterface()
         terminal.open_terminal()
+
+    def set_font(self, font_style, font_size):
+        self.font_size = font_size
+        self.font_style = font_style
+        print(font_style)
+        print(font_size)
+        self.text_area.configure(font = (font_style, font_size))
+
+    def font_up(self):
+        #TODO
+        self.font_size = self.font_size + 2
+        self.text_area.configure(font = ("Courier", self.font_size))
+
+    def font_down(self):
+        #TODO
+        self.font_size = self.font_size - 2
+        self.text_area.configure(font = ("Courier", self.font_size))
 
     def config_syntax_theme(self):
         for token, color in self.color_set.token_colors.items():
@@ -319,3 +349,5 @@ if PATH_INPUT is not None:
 else:
     NOTEPAD = Notepad(width=800, height=700)
     NOTEPAD.run()
+ 
+

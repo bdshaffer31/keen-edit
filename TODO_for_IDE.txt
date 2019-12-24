@@ -8,7 +8,6 @@ TODO for IDE development:
  - interpretor for unicode characters?
  - saved / unsaved changes tracker at top of editor
  - automatic syntax highlighting
- - font options
  - auto indent
  - control z undo, control y redo 
  - add icon
@@ -24,11 +23,15 @@ TODO for IDE development:
  - run via drop down
  - not show files that can't be opened
  - give option to delete, create and move files within open directory
- - color theme should use dictionary for colors, too many attributes
  - file explorer could just be a module with functions
  - file explorer not opening some times
+ - view jumps on syntax highlight
+ - backspace four times if there are four spaces (tab)
+ - dont open a new instance from FE if already open
 
 Completed:
+ - font size options
+ - font choice options
  - ctrl + s, ctrl + o save and open
  - syntax highlightning using pygment from button press
  - tab as four spaces ;)
@@ -41,6 +44,7 @@ Completed:
  - text doesn't wrap
  - file explorer that opens in current directory
  - file explorer functionality
+ - color theme should use dictionary for colors, too many attributes
  - open folder option that allows a directory to be open
 	- (kind of)
 
