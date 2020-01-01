@@ -25,11 +25,14 @@ TODO for IDE development:
  - give option to delete, create and move files within open directory
  - file explorer could just be a module with functions
  - file explorer not opening some times
- - view jumps on syntax highlight
+ - on syntax highlight move to same part of screen
  - backspace four times if there are four spaces (tab)
- - dont open a new instance from FE if already open
- - 'predictive' typing if you press shift-tab 
-    - pop up menu of possible options
+ - dont open a new instance from FE if already open (focus instead)
+ - modify tab display and tab input options
+ - auto complete uses keyboard input
+ - compile on save
+ - file_path needs to be an instance variable for commands like compile, run
+
 
 Completed:
  - font size options
@@ -49,4 +52,7 @@ Completed:
  - color theme should use dictionary for colors, too many attributes
  - open folder option that allows a directory to be open
 	- (kind of)
+ - 'predictive' typing if you press shift-tab 
+    - pop up menu of possible options
+ - view jumps on syntax highlight
 

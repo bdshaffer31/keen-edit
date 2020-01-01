@@ -2,6 +2,7 @@ import tkinter as tk
 import os
 import sys
 import difflib
+from pylint.lint import Run
 # To get the space above for message
 from tkinter.messagebox import showinfo
 # To get the dialog box to open when required
@@ -34,6 +35,7 @@ class Notepad:
     view_menu = tk.Menu(menu_bar, tearoff=0)
     help_menu = tk.Menu(menu_bar, tearoff=0)
     font_menu = tk.Menu(menu_bar, tearoff=0)
+    run_menu = tk.Menu(menu_bar, tearoff=0)
 
     popup_menu = tk.Menu(menu_bar, tearoff=0)
     auto_sug_menu = tk.Menu(menu_bar, tearoff=0)
@@ -51,6 +53,7 @@ class Notepad:
         self.file_explorer = FileExplorer(self.run_path)
         self.font_size = 10
         self.font_style = 'Courier'
+        self.line_viewed = 1.0
 
         # Set icon
         try:
@@ -131,6 +134,9 @@ class Notepad:
         self.font_menu.add_command(label='Times New Roman', command = lambda: self.set_font('Times New Roman', self.font_size))
         self.font_menu.add_command(label='FixedSys', command = lambda: self.set_font('Fixedsys', self.font_size))
         self.menu_bar.add_cascade(label='Font', menu=self.font_menu)
+
+        # add run menu features then add to menu bar
+        #self.run_menu.add_command(label='compile', command = lambda: self.pylint_errors())
 
         # To create a feature of description of the notepad
         self.help_menu.add_command(label='About Notepad', command=self.__show_about)
@@ -218,33 +224,22 @@ class Notepad:
         self.font_style = font_style
         self.text_area.configure(font = (font_style, font_size))
 
-    def font_up(self):
-        #TODO
-        self.font_size = self.font_size + 2
-        self.text_area.configure(font = ("Courier", self.font_size))
-
-    def font_down(self):
-        #TODO
-        self.font_size = self.font_size - 2
-        self.text_area.configure(font = ("Courier", self.font_size))
-
     def config_syntax_theme(self):
         for token, color in self.color_set.token_colors.items():
             self.text_area.tag_configure(token, foreground=color)
 
     def syntax_highlight(self):
+        self.line_viewed = self.text_area.index(tk.INSERT)
         data = self.text_area.get('1.0', 'end-1c')
-
         # set up themes for highlighter
         self.config_syntax_theme()
-
         self.text_area.delete('1.0', tk.END)
         for token, content in lex(data, PythonLexer()):
-            #print(content)
-            #print(token)
-            #self.text_area.mark_set("range_end", "range_start + %dc" % len(content))
             self.text_area.insert(tk.END, content, str(token))
-            #self.text_area.mark_set("range_start", "range_end")
+
+        # move the view and cursor
+        self.text_area.see(self.line_viewed)
+        self.text_area.mark_set(tk.INSERT, self.line_viewed)
 
     def open_file_event(self, event):
         self.open_file()
@@ -276,6 +271,9 @@ class Notepad:
 
     def get_open_dir(self):
         return os.path.dirname(self.file)
+
+    def pylint_errors(self, in_file):
+        Run(['--errors-only', in_file])
 
     def new_file(self):
         self.root.title('Untitled - Notepad')
