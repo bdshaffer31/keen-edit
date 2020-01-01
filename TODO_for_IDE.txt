@@ -28,6 +28,8 @@ TODO for IDE development:
  - view jumps on syntax highlight
  - backspace four times if there are four spaces (tab)
  - dont open a new instance from FE if already open
+ - 'predictive' typing if you press shift-tab 
+    - pop up menu of possible options
 
 Completed:
  - font size options

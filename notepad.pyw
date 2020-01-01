@@ -1,6 +1,7 @@
 import tkinter as tk
 import os
 import sys
+import difflib
 # To get the space above for message
 from tkinter.messagebox import showinfo
 # To get the dialog box to open when required
@@ -35,6 +36,7 @@ class Notepad:
     font_menu = tk.Menu(menu_bar, tearoff=0)
 
     popup_menu = tk.Menu(menu_bar, tearoff=0)
+    auto_sug_menu = tk.Menu(menu_bar, tearoff=0)
 
     # To add scrollbar
     yscroll_bar = tk.Scrollbar(text_area)
@@ -124,8 +126,8 @@ class Notepad:
         self.font_menu.add_command(label='Size Up', command = lambda: self.set_font(self.font_style, self.font_size+2))
         self.font_menu.add_command(label='Size Down', command = lambda: self.set_font(self.font_style, self.font_size-2))
         self.font_menu.add_separator()
-        self.font_menu.add_command(label='Helvetica', command = lambda: self.set_font('Helvetica', self.font_size))
         self.font_menu.add_command(label='Courier', command = lambda: self.set_font('Courier', self.font_size))
+        self.font_menu.add_command(label='Helvetica', command = lambda: self.set_font('Helvetica', self.font_size))
         self.font_menu.add_command(label='Times New Roman', command = lambda: self.set_font('Times New Roman', self.font_size))
         self.font_menu.add_command(label='FixedSys', command = lambda: self.set_font('Fixedsys', self.font_size))
         self.menu_bar.add_cascade(label='Font', menu=self.font_menu)
@@ -134,7 +136,7 @@ class Notepad:
         self.help_menu.add_command(label='About Notepad', command=self.__show_about)
         self.menu_bar.add_cascade(label='Help', menu=self.help_menu)
 
-	# adding menu bar to root
+	    # adding menu bar to root
         self.root.config(menu=self.menu_bar)
 
         self.yscroll_bar.pack(side=tk.RIGHT, fill=tk.Y)
@@ -146,12 +148,17 @@ class Notepad:
         self.text_area.config(xscrollcommand=self.xscroll_bar.set)
 
         # Bind right click to contect menu
-        self.root.bind("<Button-3>", self.popup)
+        self.root.bind("<Button-3>", self.context_popup)
+
+        # Bind ctrl-shift to autosuggest menu
+        self.root.bind("<Control-Shift_L>", self.auto_sug_popup)
 
         # Setup pop up menu
         self.popup_menu.add_command(label='Cut', command=self.__cut)
         self.popup_menu.add_command(label='Copy', command=self.__copy)
         self.popup_menu.add_command(label='Paste', command=self.__paste)
+
+        # Setup auto suggest 
 
         # Save and open on keyboard showrtcuts
         self.text_area.bind('<Control-s>', self.save_file_event)
@@ -199,7 +206,6 @@ class Notepad:
         except TypeError:
             print('no open file')
 
-
     def open_new_window(self):
         os.system(f'start {self.run_path}')
 
@@ -210,8 +216,6 @@ class Notepad:
     def set_font(self, font_style, font_size):
         self.font_size = font_size
         self.font_style = font_style
-        print(font_style)
-        print(font_size)
         self.text_area.configure(font = (font_style, font_size))
 
     def font_up(self):
@@ -229,7 +233,7 @@ class Notepad:
             self.text_area.tag_configure(token, foreground=color)
 
     def syntax_highlight(self):
-        data = self.text_area.get("1.0", 'end-1c')
+        data = self.text_area.get('1.0', 'end-1c')
 
         # set up themes for highlighter
         self.config_syntax_theme()
@@ -325,11 +329,51 @@ class Notepad:
     def __paste(self):
         self.text_area.event_generate('<<Paste>>')
 
-    def popup(self, event):
+    def context_popup(self, event):
         try:
             self.popup_menu.tk_popup(event.x_root, event.y_root, 0)
         finally:
             self.popup_menu.grab_release()
+
+    def get_selected(self, detailed = False):
+        start_index = self.text_area.index("sel.first") 
+        end_index = self.text_area.index("sel.last")
+        s = self.text_area.get(start_index, end_index)
+        if detailed is False:
+            return s
+        elif detailed is True:
+            return s, start_index, end_index
+
+    def get_suggestions(self, input_s):
+        data = self.text_area.get('1.0', 'end-1c')
+        text_list = []
+        excluded_tokens = ['Token.Comment', 'Token.Comment.Single']
+        for token, content in lex(data, PythonLexer()):
+            if token not in excluded_tokens:
+                text_list.append(content)
+        text_list = list(set(text_list))
+        sugs = difflib.get_close_matches(input_s, text_list, n=5, cutoff=0.2)#, n=5
+        return sugs
+
+    def replace_text(self, s, range_start, range_end):
+        self.text_area.delete(range_start, range_end)
+        self.text_area.insert(range_start, s)
+
+    def auto_sug_popup(self, event):
+        # reinitialize menu to delete menu options without TCl Error
+        if self.auto_sug_menu.index('end') is not None:
+            self.auto_sug_menu = tk.Menu(self.menu_bar, tearoff=0)
+        
+        try:
+            s, start_i, end_i = self.get_selected(detailed = True)
+            suggestions = self.get_suggestions(s)
+            # add menu options for suggestions
+            for sug in suggestions:
+                self.auto_sug_menu.add_command(label=sug, command= lambda s=sug : self.replace_text(s, start_i, end_i) )
+            self.auto_sug_menu.tk_popup(event.x_root, event.y_root, 0)
+                
+        finally:
+            self.auto_sug_menu.grab_release()
 
     def run(self):
         # Run main application
@@ -350,4 +394,3 @@ else:
     NOTEPAD = Notepad(width=800, height=700)
     NOTEPAD.run()
  
-
