@@ -71,6 +71,15 @@ class Notepad:
         except KeyError:
             pass
 
+        # set text area and header to last opened file
+        try:
+            self.file_name = kwargs['file_path']
+            self.set_from_file(self.file_name)
+        except KeyError:
+            self.file_name = self.read_last_opened()
+            if self.file_name:
+                self.set_from_file(self.file_name)
+
         # Set the window text
         self.root.title("Untitled - Notepad")
         self.root.protocol("WM_DELETE_WINDOW", self.on_close_root)
@@ -136,7 +145,9 @@ class Notepad:
         self.menu_bar.add_cascade(label='Font', menu=self.font_menu)
 
         # add run menu features then add to menu bar
-        #self.run_menu.add_command(label='compile', command = lambda: self.pylint_errors())
+        self.run_menu.add_command(label='Compile', command = lambda: self.pylint_errors(self.file_name))
+        self.run_menu.add_command(label='Pylint', command = lambda: self.pylint_all(self.file_name))
+        self.menu_bar.add_cascade(label='Run', menu=self.run_menu)
 
         # To create a feature of description of the notepad
         self.help_menu.add_command(label='About Notepad', command=self.__show_about)
@@ -169,16 +180,6 @@ class Notepad:
         # Save and open on keyboard showrtcuts
         self.text_area.bind('<Control-s>', self.save_file_event)
         self.text_area.bind('<Control-o>', self.open_file_event)
-
-        # set text area and header to last opened file
-        try:
-            file_name = kwargs['file_path']
-            self.set_from_file(file_name)
-        except KeyError:
-            file_name = self.read_last_opened()
-            if file_name:
-                self.set_from_file(file_name)
-
 
     def quit_application(self):
         self.root.destroy()
@@ -273,7 +274,11 @@ class Notepad:
         return os.path.dirname(self.file)
 
     def pylint_errors(self, in_file):
-        Run(['--errors-only', in_file])
+        #Run(['--errors-only', in_file])
+        os.system(f'python -m pylint --errors-only {in_file} & pause')
+
+    def pylint_all(self, in_file):
+        os.system(f'python -m pylint {in_file} & pause')
 
     def new_file(self):
         self.root.title('Untitled - Notepad')

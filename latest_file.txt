@@ -1,1 +1,1 @@
-C:\Users\Benjamin\Documents\python_projects\KEEN_EDIT\notepad.pyw
+C:\Users\Benjamin\Documents\python_projects\KEEN_EDIT\print_tokens.py

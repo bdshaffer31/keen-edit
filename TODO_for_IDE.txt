@@ -32,6 +32,7 @@ TODO for IDE development:
  - auto complete uses keyboard input
  - compile on save
  - file_path needs to be an instance variable for commands like compile, run
+	- resolve self.file vs self.file_name
 
 
 Completed:
