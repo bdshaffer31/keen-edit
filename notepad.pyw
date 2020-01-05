@@ -1,5 +1,6 @@
 import tkinter as tk
 import os
+import subprocess
 import sys
 import difflib
 from pylint.lint import Run
@@ -71,6 +72,10 @@ class Notepad:
         except KeyError:
             pass
 
+        # set up root before checking file loads
+        self.root.title("Untitled - Notepad")
+        self.root.protocol("WM_DELETE_WINDOW", self.on_close_root)
+
         # set text area and header to last opened file
         try:
             self.file_name = kwargs['file_path']
@@ -79,10 +84,6 @@ class Notepad:
             self.file_name = self.read_last_opened()
             if self.file_name:
                 self.set_from_file(self.file_name)
-
-        # Set the window text
-        self.root.title("Untitled - Notepad")
-        self.root.protocol("WM_DELETE_WINDOW", self.on_close_root)
 
         # Center the window
         screen_width = self.root.winfo_screenwidth()
@@ -145,8 +146,9 @@ class Notepad:
         self.menu_bar.add_cascade(label='Font', menu=self.font_menu)
 
         # add run menu features then add to menu bar
-        self.run_menu.add_command(label='Compile', command = lambda: self.pylint_errors(self.file_name))
-        self.run_menu.add_command(label='Pylint', command = lambda: self.pylint_all(self.file_name))
+        self.run_menu.add_command(label='Compile', command = lambda fn = self.file_name: self.pylint_errors(fn))
+        self.run_menu.add_command(label='Pylint', command = lambda fn = self.file_name: self.pylint_all(fn))
+        self.run_menu.add_command(label='Run', command = lambda fn = self.file_name: self.run_file(fn))
         self.menu_bar.add_cascade(label='Run', menu=self.run_menu)
 
         # To create a feature of description of the notepad
@@ -259,7 +261,10 @@ class Notepad:
             self.set_from_file(file_path)
 
     def set_from_file(self, file_name):
-        self.root.title(os.path.basename(file_name) + " - Notepad")
+        print(file_name)
+        file_basename = os.path.basename(file_name)
+        print(file_basename)
+        self.root.title(os.path.basename(file_basename) + " - Notepad")
         self.text_area.delete(1.0, tk.END)
 
         in_file = open(file_name, "r")
@@ -275,10 +280,18 @@ class Notepad:
 
     def pylint_errors(self, in_file):
         #Run(['--errors-only', in_file])
-        os.system(f'python -m pylint --errors-only {in_file} & pause')
+        cmd = f'python -m pylint --errors-only {in_file}' # & pause
+        #os.system(cmd)
+        subprocess.call(cmd, shell=True)
 
     def pylint_all(self, in_file):
-        os.system(f'python -m pylint {in_file} & pause')
+        cmd = f'python -m pylint {in_file}' # & pause
+        #os.system(cmd)
+        subprocess.call(cmd, shell=True)
+
+    def run_file(self, in_file):
+        cmd = f'python {in_file}'
+        subprocess.call(cmd, shell=True)
 
     def new_file(self):
         self.root.title('Untitled - Notepad')

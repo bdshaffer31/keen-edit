@@ -33,6 +33,8 @@ TODO for IDE development:
  - compile on save
  - file_path needs to be an instance variable for commands like compile, run
 	- resolve self.file vs self.file_name
+ - run commands need to work outside keen edit directory
+ - switch what gets ran (file_name not updating in commands)
 
 
 Completed:
@@ -56,4 +58,6 @@ Completed:
  - 'predictive' typing if you press shift-tab 
     - pop up menu of possible options
  - view jumps on syntax highlight
+ - subprocess for calling commands to not lock up window
+ - change title of pages opened after first
 
