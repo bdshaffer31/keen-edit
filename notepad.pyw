@@ -55,6 +55,7 @@ class Notepad:
         self.font_size = 10
         self.font_style = 'Courier'
         self.line_viewed = 1.0
+        self.use_syntax_hl = True
 
         # Set icon
         try:
@@ -134,7 +135,8 @@ class Notepad:
 
         # add view menu features and then add to menu bar
         self.view_menu.add_command(label='Open Console', command=self.open_console)
-        self.view_menu.add_command(label='Syntax Highlight', command=self.syntax_highlight)
+        self.view_menu.add_command(label='Toggle Syntax Highlight', command=self.toggle_syntax_highlight)
+        #self.view_menu.add_checkbutton(label='Toggle Syntax Highlight', onvalue=1, offvalue=0, variable=self.use_syntax_hl)
         self.view_menu.add_command(label='New Window', command=self.open_new_window)
         self.view_menu.add_command(label='File Explorer', command=self.open_file_exp)
 
@@ -229,18 +231,27 @@ class Notepad:
         self.font_style = font_style
         self.text_area.configure(font = (font_style, font_size))
 
+    def toggle_syntax_highlight(self):
+        self.use_syntax_hl = not self.use_syntax_hl
+        self.syntax_highlight(use_lexer=self.use_syntax_hl)
+
+
     def config_syntax_theme(self):
         for token, color in self.color_set.token_colors.items():
             self.text_area.tag_configure(token, foreground=color)
 
-    def syntax_highlight(self):
+    def syntax_highlight(self, use_lexer=True):
         self.line_viewed = self.text_area.index(tk.INSERT)
         data = self.text_area.get('1.0', 'end-1c')
         # set up themes for highlighter
         self.config_syntax_theme()
         self.text_area.delete('1.0', tk.END)
-        for token, content in lex(data, PythonLexer()):
-            self.text_area.insert(tk.END, content, str(token))
+        if use_lexer:
+            for token, content in lex(data, PythonLexer()):
+                self.text_area.insert(tk.END, content, str(token))
+        else:
+            for token, content in lex(data, PythonLexer()):
+                self.text_area.insert(tk.END, content, 'Token.Name')
 
         # move the view and cursor
         self.text_area.see(self.line_viewed)

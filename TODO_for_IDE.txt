@@ -35,6 +35,7 @@ TODO for IDE development:
  - pylint and compile commands not working on opened file explorers
  - improve open file logic
  - syntax highlight in real time
+ - make syntax hihligh optional for editing text files etc
 
 
 Completed:
