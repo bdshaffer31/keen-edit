@@ -7,7 +7,6 @@ TODO for IDE development:
  - git integration via cmder
  - interpretor for unicode characters?
  - saved / unsaved changes tracker at top of editor
- - automatic syntax highlighting
  - auto indent
  - control z undo, control y redo 
  - add icon
@@ -31,10 +30,11 @@ TODO for IDE development:
  - modify tab display and tab input options
  - auto complete uses keyboard input
  - compile on save
- - file_path needs to be an instance variable for commands like compile, run
-	- resolve self.file vs self.file_name
  - run commands need to work outside keen edit directory
  - switch what gets ran (file_name not updating in commands)
+ - pylint and compile commands not working on opened file explorers
+ - improve open file logic
+ - syntax highlight in real time
 
 
 Completed:
@@ -60,4 +60,6 @@ Completed:
  - view jumps on syntax highlight
  - subprocess for calling commands to not lock up window
  - change title of pages opened after first
-
+ - automatic syntax highlighting on save
+ - file_path needs to be an instance variable for commands like compile, run
+	- resolve self.file vs self.file_name

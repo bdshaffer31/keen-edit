@@ -76,14 +76,22 @@ class Notepad:
         self.root.title("Untitled - Notepad")
         self.root.protocol("WM_DELETE_WINDOW", self.on_close_root)
 
+        # add run menu features then add to menu bar
+        self.run_menu.add_command(label='Compile', state='disabled')
+        self.run_menu.add_command(label='Pylint', state='disabled')
+        self.run_menu.add_command(label='Run', state='disabled')
+
         # set text area and header to last opened file
         try:
-            self.file_name = kwargs['file_path']
-            self.set_from_file(self.file_name)
+            self.file_path = kwargs['file_path']
+            self.set_from_file(self.file_path)
         except KeyError:
-            self.file_name = self.read_last_opened()
-            if self.file_name:
-                self.set_from_file(self.file_name)
+            try:
+                self.file_path = self.read_last_opened()
+                if self.file_path:
+                    self.set_from_file(self.file_path)
+            except ValueError:
+                print('latest_file.txt corrupted')
 
         # Center the window
         screen_width = self.root.winfo_screenwidth()
@@ -118,22 +126,17 @@ class Notepad:
         self.file_menu.add_command(label='Save', command=self.save_file)
         self.file_menu.add_separator()
         self.file_menu.add_command(label='Exit', command=self.quit_application)
-
-        self.menu_bar.add_cascade(label='File', menu=self.file_menu)
-
+        
         # Add copy paste cut into edit menu and add edit menu to bar
         self.edit_menu.add_command(label='Cut', command=self.__cut)
         self.edit_menu.add_command(label='Copy', command=self.__copy)
         self.edit_menu.add_command(label='Paste', command=self.__paste)
-
-        self.menu_bar.add_cascade(label='Edit', menu=self.edit_menu)
 
         # add view menu features and then add to menu bar
         self.view_menu.add_command(label='Open Console', command=self.open_console)
         self.view_menu.add_command(label='Syntax Highlight', command=self.syntax_highlight)
         self.view_menu.add_command(label='New Window', command=self.open_new_window)
         self.view_menu.add_command(label='File Explorer', command=self.open_file_exp)
-        self.menu_bar.add_cascade(label='View', menu=self.view_menu)
 
         # add font menu features then add to menu bar
         self.font_menu.add_command(label='Size Up', command = lambda: self.set_font(self.font_style, self.font_size+2))
@@ -143,16 +146,16 @@ class Notepad:
         self.font_menu.add_command(label='Helvetica', command = lambda: self.set_font('Helvetica', self.font_size))
         self.font_menu.add_command(label='Times New Roman', command = lambda: self.set_font('Times New Roman', self.font_size))
         self.font_menu.add_command(label='FixedSys', command = lambda: self.set_font('Fixedsys', self.font_size))
-        self.menu_bar.add_cascade(label='Font', menu=self.font_menu)
-
-        # add run menu features then add to menu bar
-        self.run_menu.add_command(label='Compile', command = lambda fn = self.file_name: self.pylint_errors(fn))
-        self.run_menu.add_command(label='Pylint', command = lambda fn = self.file_name: self.pylint_all(fn))
-        self.run_menu.add_command(label='Run', command = lambda fn = self.file_name: self.run_file(fn))
-        self.menu_bar.add_cascade(label='Run', menu=self.run_menu)
 
         # To create a feature of description of the notepad
         self.help_menu.add_command(label='About Notepad', command=self.__show_about)
+        
+        # add cascade menus in desired order
+        self.menu_bar.add_cascade(label='File', menu=self.file_menu)
+        self.menu_bar.add_cascade(label='Edit', menu=self.edit_menu)
+        self.menu_bar.add_cascade(label='View', menu=self.view_menu)
+        self.menu_bar.add_cascade(label='Font', menu=self.font_menu)
+        self.menu_bar.add_cascade(label='Run', menu=self.run_menu)
         self.menu_bar.add_cascade(label='Help', menu=self.help_menu)
 
 	    # adding menu bar to root
@@ -176,6 +179,7 @@ class Notepad:
         self.popup_menu.add_command(label='Cut', command=self.__cut)
         self.popup_menu.add_command(label='Copy', command=self.__copy)
         self.popup_menu.add_command(label='Paste', command=self.__paste)
+        self.popup_menu.add_command(label='Suggest')
 
         # Setup auto suggest 
 
@@ -185,16 +189,14 @@ class Notepad:
 
     def quit_application(self):
         self.root.destroy()
-        # exit()
 
     def __show_about(self):
         showinfo('Notepad', 'Benjamin Shaffer')
 
     def on_close_root(self):
         latest_file = open('latest_file.txt', 'w')
-        if self.file:
-            current_path = os.path.abspath(self.file)
-            latest_file.write(current_path)
+        if self.file_path:
+            latest_file.write(self.file_path)
         else:
             latest_file.write('')
         latest_file.close()
@@ -254,29 +256,36 @@ class Notepad:
 
         if file_path == "":
             # no file to open
-            self.file = None
+            self.file_path = None
         else:
             # Try to open the file
             # set the window title
             self.set_from_file(file_path)
 
-    def set_from_file(self, file_name):
-        print(file_name)
-        file_basename = os.path.basename(file_name)
-        print(file_basename)
+    def set_from_file(self, file_path):
+        file_basename = os.path.basename(file_path)
         self.root.title(os.path.basename(file_basename) + " - Notepad")
         self.text_area.delete(1.0, tk.END)
 
-        in_file = open(file_name, "r")
+        in_file = open(file_path, "r")
         self.text_area.insert(1.0, in_file.read())
         in_file.close()
 
-        self.file = file_name
+        self.set_run_menus()
 
+        self.file_path = file_path
         self.syntax_highlight()
 
+    def set_run_menus(self):
+        self.run_menu.delete('Compile')
+        self.run_menu.delete('Pylint')
+        self.run_menu.delete('Run')
+        self.run_menu.add_command(label='Compile', command = lambda: self.pylint_errors(self.file_path))
+        self.run_menu.add_command(label='Pylint', command = lambda: self.pylint_all(self.file_path))
+        self.run_menu.add_command(label='Run', command = lambda: self.run_file(self.file_path))
+
     def get_open_dir(self):
-        return os.path.dirname(self.file)
+        return os.path.dirname(self.file_path)
 
     def pylint_errors(self, in_file):
         #Run(['--errors-only', in_file])
@@ -291,11 +300,11 @@ class Notepad:
 
     def run_file(self, in_file):
         cmd = f'python {in_file}'
-        subprocess.call(cmd, shell=True)
+        subprocess.call(cmd, shell=True, cwd=self.get_open_dir())
 
     def new_file(self):
         self.root.title('Untitled - Notepad')
-        self.file = None
+        self.file_path = None
         self.text_area.delete(1.0, tk.END)
 
     def read_text_input(self):
@@ -310,24 +319,24 @@ class Notepad:
         self.save_file()
 
     def save_file(self):
-        if self.file is None:
+        if self.file_path is None:
             # Save as new file
-            self.file = asksaveasfilename(initialfile='Untitled.txt',
+            self.file_path = asksaveasfilename(initialfile='Untitled.txt',
                                           defaultextension='.txt',
                                           filetypes=[('All Files', '*.*'),
                                                      ('Text Documents', '*.txt')])
-            if self.file == '':
-                self.file = None
+            if self.file_path == '':
+                self.file_path = None
             else:
                 # Try to save the file
-                file = open(self.file, 'w')
+                file = open(self.file_path, 'w')
                 file.write(self.text_area.get(1.0, tk.END))
                 file.close()
 
                 # Change the window title
-                self.root.title(os.path.basename(self.file) + ' - Notepad')
+                self.root.title(os.path.basename(self.file_path) + ' - Notepad')
         else:
-            file = open(self.file, 'w')
+            file = open(self.file_path, 'w')
             file.write(self.text_area.get(1.0, tk.END))
             file.close()
         self.syntax_highlight()
@@ -347,6 +356,8 @@ class Notepad:
 
     def context_popup(self, event):
         try:
+            self.popup_menu.delete('Suggest')
+            self.popup_menu.add_command(label='Suggest', command= lambda: self.auto_sug_popup(event))
             self.popup_menu.tk_popup(event.x_root, event.y_root, 0)
         finally:
             self.popup_menu.grab_release()
@@ -368,7 +379,7 @@ class Notepad:
             if token not in excluded_tokens:
                 text_list.append(content)
         text_list = list(set(text_list))
-        sugs = difflib.get_close_matches(input_s, text_list, n=5, cutoff=0.2)#, n=5
+        sugs = difflib.get_close_matches(input_s, text_list, n=5, cutoff=0.3)
         return sugs
 
     def replace_text(self, s, range_start, range_end):
